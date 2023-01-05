@@ -1,7 +1,7 @@
 package domain;
 
-public class Roles {
-	String[][] roleArray = { { "", "Gesch‰ftsleitung" }, { "", "Informationssicherheitsbeauftragter" },
+public class roles {
+	String[][] roleArray = { { "", "Gesch√§ftsleitung" }, { "", "Informationssicherheitsbeauftragter" },
 			{ "", "Datenschutzbeauftragter" }, { "", "Anwalt" }, { "", "Head of Human Resources" },
 			{ "", "Head of Marketing" } };
 

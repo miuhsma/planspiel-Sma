@@ -20,7 +20,8 @@ public class userinterface {
 			System.out.println("");
 			print("1. Spiel starten ");
 			print("2. Einstellungen");
-			print("3. Beenden");
+			print("3. Authoren");
+			print("4. Beenden");
 			int wahl = Integer.parseInt(scan.nextLine());
 			switch (wahl) {
 			case 1:
@@ -35,6 +36,9 @@ public class userinterface {
 				settings();
 				break;
 			case 3:
+				authoren();
+				break;
+			case 4:
 				System.out.println("_______________________");
 				print("Spiel beenden, tschüss! ");
 				bool = false;
@@ -101,7 +105,7 @@ public class userinterface {
 		ArrayList<Integer> choosen = new ArrayList<Integer>();
 		ArrayList<String> roleList = new ArrayList<String>(Arrays.asList(roles));
 		print("Mit wie vielen Spielern möchten sie Spielen? (2mind - 6max)");
-		int anzahl = Integer.parseInt(scan.nextLine()) - 1;
+		int anzahl = Integer.parseInt(scan.nextLine());
 
 		for (int i = 0; i < anzahl; i++) {
 			System.out.println("");
@@ -144,6 +148,20 @@ public class userinterface {
 
 		}
 		System.out.println("");
+	}
+
+	public void authoren() {
+		System.out.println();
+		System.out.println("Authoren:");
+		print("Lukas Siegle");
+		print("Carlo Bauer");
+		print("Sven Schlicksupp");
+		print("Vincent Leber");
+		print("Mike Ullrich");
+		print("Petar");
+		System.out.println();
+		print("Sma - Planspiel WS22/23");
+
 	}
 
 }

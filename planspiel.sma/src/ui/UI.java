@@ -14,7 +14,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.DimensionUIResource;
 
-public class UI extends UIWindows {
+public class UI {
     public JFrame window;
     public Container content = new Container();
     public JPanel titleNamePanel, buttonPanel;

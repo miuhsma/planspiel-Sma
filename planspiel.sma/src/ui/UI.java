@@ -3,6 +3,10 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
@@ -11,15 +15,18 @@ import java.awt.event.FocusEvent;
 import java.awt.Component;
 import java.awt.event.FocusListener;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.util.EventListener;
 import java.util.List;
 import java.awt.Color;
 
+import javax.imageio.ImageIO;
 import javax.sql.rowset.spi.SyncResolver;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.DimensionUIResource;
+import javax.swing.text.JTextComponent;
 
 import domain.Rolle;
 import facade.gamecontroller;
@@ -27,6 +34,8 @@ import facade.gamecontroller;
 public class UI {
     public JFrame window;
     public Container content = new Container();
+    public Container gameContent = new Container();
+    
     public JPanel titleNamePanel = new JPanel(); 
     public JPanel buttonPanel = new JPanel();
     public JLabel titleNameLabel;
@@ -37,8 +46,9 @@ public class UI {
     public Font errormessageFont = new Font("Times New Roman", Font.PLAIN, 10);
     public Font lblFont = new Font("Times New Roman", Font.PLAIN, 20);
     private int currentColorValue = 255;
-
+    private int widthInteger = 110;
     private Timer timer;
+    private int yCoordinate = 0;
     String[] playerNames = { "Spieler 1", "Spieler 2", "Spieler 3", "Spieler 4", "Spieler 5", "Spieler 6" };
     final String[] placeholders = { "Spieler 1", "Spieler 2", "Spieler 3", "Spieler 4", "Spieler 5", "Spieler 6" };
     final String[] scenarios = {"Daten wurden im Darknet veröffentlicht!",
@@ -89,11 +99,11 @@ public class UI {
         buttonPanel.setBounds(300,270,200,300);
         buttonPanel.setBackground(Color.black);
         
-        JButton[] buttons = new JButton[4];
+        JButton[] buttons = new JButton[3];
         buttons[0] = createButton(BUTTON.STARTGAME);
-        buttons[1] = createButton(BUTTON.SETTINGS);
-        buttons[2] = createButton(BUTTON.ABOUTUS);
-        buttons[3] = createButton(BUTTON.EXIT);
+        //buttons[1] = createButton(BUTTON.SETTINGS);
+        buttons[1] = createButton(BUTTON.ABOUTUS);
+        buttons[2] = createButton(BUTTON.EXIT);
                 
         for (JButton button : buttons) {
             buttonPanel.add(button);
@@ -107,6 +117,7 @@ public class UI {
         titleNamePanel.removeAll();
         buttonPanel.removeAll();
         content.removeAll();
+        gameContent.removeAll();
     }
     
     public void ui_setup() {
@@ -169,26 +180,55 @@ public class UI {
         });
         content.add(buttonPanel);
 
-        // ------------------- Szenario-Auswahl --------------------------------------------------------------------------------------------
+        // ------------------- Einstellungen --------------------------------------------------------------------------------------------
 
-        JPanel scenarioPanel = new JPanel();
-        scenarioPanel.setBounds(100,425,350,50);
-        scenarioPanel.setBackground(Color.black);
-        scenarioPanel.setLayout(new GridLayout(2,0));
+        JPanel settingsPanel = new JPanel();
+        settingsPanel.setBounds(100,425,350,100);
+        settingsPanel.setBackground(Color.black);
+        settingsPanel.setLayout(new GridLayout(4,0));
         JLabel scenarioLabel = new JLabel();
         scenarioLabel.setFont(lblFont);
         scenarioLabel.setBackground(Color.black);
         scenarioLabel.setForeground(Color.white);
-        scenarioLabel.setText("Wähle dein gewünschtes Szenario aus:");
-        scenarioPanel.add(scenarioLabel);
+        scenarioLabel.setText("Szenario:");
+        settingsPanel.add(scenarioLabel);
 
-
-        
         JComboBox scenarioComboBox = new JComboBox(scenarios);
         scenarioComboBox.setBackground(Color.black);
         scenarioComboBox.setForeground(Color.white);
-        scenarioPanel.add(scenarioComboBox);
-        content.add(scenarioPanel);
+        settingsPanel.add(scenarioComboBox);
+
+        JLabel speedLabel = new JLabel();
+        speedLabel.setFont(lblFont);
+        speedLabel.setBackground(Color.black);
+        speedLabel.setForeground(Color.white);
+        speedLabel.setText("Textgeschwindigkeit:");
+        settingsPanel.add(speedLabel);
+
+        JTextField speedField = new JTextField("75");
+        speedField.setHorizontalAlignment(JTextField.CENTER);
+        speedField.setFont(textboxFont);
+        speedField.addFocusListener(new FocusListener() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    if (speedField.getText().equals("75"))
+                        speedField.setText("");                     
+                }
+    
+                @Override
+                public void focusLost(FocusEvent e) {
+                    if (speedField.getText().equals(""))
+                        speedField.setText("75");   
+                }
+            });
+        speedField.setBackground(Color.black);
+        speedField.setForeground(Color.white);
+        speedField.setPreferredSize(new Dimension(50, 50));
+        settingsPanel.add(speedField);
+
+        content.add(settingsPanel);
+
+
 
         // ------------------- Spielen-Knopf --------------------------------------------------------------------------------------------
 
@@ -215,22 +255,91 @@ public class UI {
     }
 
     public void ui_game() {
-        darken();
-        //clear_ui();
+        // darken();
+        clear_ui();
+        gameContent = window.getContentPane();
+        gameContent.setBounds(0, 0, 800, 600);
+        
+        
+        addDashLine(window);
+        addContentLine(window, "Datenschutzbeauftragter");
+        addDashLine(window);
+        addPicture(window, "C:\\ascii1.png");
+        addDashLine(window);
+        addContentLine(window, "Hier kommt die Aufgabenstellung rein...");
+        addDashLine(window);
 
-        //window.repaint();
-        //window.setVisible(true);
+        addContentLine(window, "Antwort numero XYZ als klickbarer Button...");
+        addContentLine(window, "BlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBla...");
+        addContentLine(window, "BlaBla...");
+        addContentLine(window, "BlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBlaBla...");
+        addContentLine(window, "BlaBlaBlaBlaBla...");
+
+
+        window.repaint();
+        window.setVisible(true);
     }
+    public void addPicture(JFrame window, String path) {
+        int scale = 200;
+        try {
+            BufferedImage rawImage = ImageIO.read(new File(path));
+            Image image = rawImage.getScaledInstance(scale, scale, java.awt.Image.SCALE_SMOOTH);
+            ImageIcon icon = new ImageIcon(image);
+            JLabel label = new JLabel(icon);
+            label.setBounds(300, yCoordinate, scale, scale);
+            window.add(label);
+            yCoordinate += scale;
+        } catch (IOException e) {
+            System.out.println("Error reading image: " + e);
+        }
+    }
+    public void addDashLine(JFrame window) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("+");
+        for (int i = 0; i < widthInteger - 2; i++) {
+            sb.append("-");
+        }
+        sb.append("+");
 
+        JLabel label = new JLabel(sb.toString());
+        label.setForeground(Color.WHITE);
+        label.setFont(lblFont);
+        label.setBounds(20, yCoordinate, window.getWidth()-40, 20);
+        
+        window.add(label);
+        yCoordinate += 20;
+    }
+    public void addContentLine(JFrame window, String line) {
+        int lineLength = line.length();
+        int spacesBefore = (widthInteger + 25 - lineLength) / 2;
+        int spacesAfter = widthInteger  + 5 - lineLength - spacesBefore;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < spacesBefore; i++) {
+            sb.append(" ");
+        }
+        sb.append(line);
+        for (int i = 0; i < spacesAfter; i++) {
+            sb.append(" ");
+        }
+        JLabel label = new JLabel(sb.toString());
+        label.setForeground(Color.WHITE);
+        label.setFont(lblFont);
+        label.setBounds(20, yCoordinate, window.getWidth()-40, 20);
+        
+        window.add(label);
+        yCoordinate += 20;
+    }
+    
     private void darken() {
-        timer = new Timer(250, new ActionListener() {
+        timer = new Timer(75, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 currentColorValue -= 25;
-                System.out.println(currentColorValue);
                 if (currentColorValue < 0)
                     currentColorValue = 0;
                     changeAllComponents(content);
+                    if (currentColorValue <= -25) 
+                        timer.stop();
                     window.repaint();
                 }
         });
@@ -239,7 +348,7 @@ public class UI {
 
     private void changeAllComponents(Component comp) {
         comp.setForeground(new Color(currentColorValue, currentColorValue, currentColorValue));   
-        //((JComponent) comp).setBorder(new LineBorder(new Color(currentColorValue, currentColorValue, currentColorValue)));
+        ((JComponent) comp).setBorder(new LineBorder(new Color(currentColorValue, currentColorValue, currentColorValue)));
         
         if (comp instanceof Container) {
             for (Component child : ((Container) comp).getComponents()) {

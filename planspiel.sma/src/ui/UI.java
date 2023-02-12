@@ -29,7 +29,7 @@ import javax.swing.plaf.DimensionUIResource;
 import javax.swing.text.JTextComponent;
 
 import domain.Rolle;
-import facade.gamecontroller;
+import facade.Gamecontroller;
 
 public class UI {
     public JFrame window;
@@ -42,6 +42,7 @@ public class UI {
     public JLabel errormessage;
     public Font titleFont = new Font("Times New Roman", Font.PLAIN, 90);
     public Font buttonFont = new Font("Times New Roman", Font.PLAIN, 30);
+    public Font textFont = new Font("Times New Roman", Font.PLAIN, 10);
     public Font textboxFont = new Font("Times New Roman", Font.PLAIN, 20);
     public Font errormessageFont = new Font("Times New Roman", Font.PLAIN, 10);
     public Font lblFont = new Font("Times New Roman", Font.PLAIN, 20);
@@ -59,7 +60,7 @@ public class UI {
     };
    
 
-    private gamecontroller game = new gamecontroller();
+    private Gamecontroller game = new Gamecontroller();
 
     public UI() {
         window = new JFrame();
@@ -266,7 +267,7 @@ public class UI {
         addDashLine(window);
         addPicture(window, "C:\\ascii1.png");
         addDashLine(window);
-        addContentLine(window, "Hier kommt die Aufgabenstellung rein...");
+        addContentLine(window, Descriptions.MARKT);
         addDashLine(window);
 
         addContentLine(window, "Antwort numero XYZ als klickbarer Button...");
@@ -323,7 +324,7 @@ public class UI {
         }
         JLabel label = new JLabel(sb.toString());
         label.setForeground(Color.WHITE);
-        label.setFont(lblFont);
+        label.setFont(textFont);
         label.setBounds(20, yCoordinate, window.getWidth()-40, 20);
         
         window.add(label);
